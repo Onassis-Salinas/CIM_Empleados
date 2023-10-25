@@ -1,0 +1,13 @@
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: fixed;
+    width: calc(100% - var(--sideBarWidth));
+    height: var(--headerheight);
+    right: 0;
+    background-color: var(--fg);
+    z-index: 100;
+    font-size: var(--font3);
+}

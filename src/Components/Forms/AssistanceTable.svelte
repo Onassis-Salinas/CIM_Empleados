@@ -1,0 +1,79 @@
+<script>
+    import axios from "axios";
+    import { apiBase, showError } from "../utilities";
+    export let APIFetch;
+
+    let keys;
+    let res;
+    let tables = [];
+
+    $: if (APIFetch) initializeTable();
+
+    function initializeTable() {
+        APIFetch.then((e) => {
+            console.log(e.data);
+            res = e.data;
+            keys = Object.keys(res[0].Rows[0]).filter((e) => e != "Id" && e != "Area");
+            console.log(keys);
+        });
+    }
+
+    function send(table, row) {
+        axios
+            .put(apiBase + "/employees/assistance", res[table].Rows[row])
+            .then((result) => {
+                res[table].Rows[row] = result.data[0];
+            })
+            .catch((err) => {
+                console.log(res[table].Rows[row]);
+                axios.post(apiBase + "/employees/assistance/single", res[table].Rows[row]).then((result) => {
+                    res[table].Rows[row] = result.data[0];
+                    showError(err);
+                });
+            });
+    }
+</script>
+
+{#if !res}
+    loading...
+{:else if res.length !== 0 && res.length}
+    {#each res as table, j}
+        <table class="table1">
+            <tr>
+                <th colspan={keys.length}>{table.Name}</th>
+            </tr>
+            <tr>
+                {#each keys as key}
+                    <th>{key}</th>
+                {/each}
+            </tr>
+            {#each table.Rows as employee, i}
+                <tr>
+                    {#each keys as key}
+                        {#if key === "Nombre" || key === "Puesto"}
+                            <td>{employee[key]}</td>
+                        {:else}
+                            <td><input type="text" bind:value={res[j].Rows[i][key]} on:blur={() => send(j, i)} /></td>
+                        {/if}
+                    {/each}
+                </tr>
+            {/each}
+        </table>
+    {/each}
+{/if}
+
+<style>
+    td {
+        padding: 0;
+    }
+    input {
+        font-size: var(--font2);
+        background: none;
+        border: none;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        
+        padding: 8px 0;
+    }
+</style>

@@ -1,0 +1,52 @@
+:root {
+    --headerheight: 60px;
+    --sideBarWidth: 180px;
+    --br: 4px;
+
+    --bc: #f6f7f8;
+    --fg: #ffffff;
+    --border: #e5e5e5;
+
+    --color1: #d94e4e;
+    --color2: #4ea1d9;
+    --color3: #f6b14f;
+    --secondary: #959d99;
+    --text: #1a1f2e;
+
+    --font1: 12px;
+    --font2: 16px;
+    --font3: 20px;
+    --font4: 32px;
+    --font5: 50px;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--bc);
+    font-size: var(--font2);
+    color: var(--text);
+}
+
+#app {
+    display: flex;
+}
+
+main {
+    width: calc(100% - var(--sideBarWidth));
+    margin-left: var(--sideBarWidth);
+    margin-top: var(--headerheight);
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    border-radius: var(--br);
+    --mainpadding: 20px;
+    padding-top: var(--mainpadding);
+    padding-left: var(--mainpadding);
+    min-height: calc(100vh - var(--mainpadding) - var(--headerheight) - 1px);
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    font-weight: 600;
+}
