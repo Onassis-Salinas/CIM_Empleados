@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
     import axios from "axios";
 
     export let data;
@@ -52,4 +52,4 @@
     button {
         width: clamp(100px, 95%, 200px)
     }
-</style>
+</style> -->

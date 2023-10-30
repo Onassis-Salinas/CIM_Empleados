@@ -3,6 +3,7 @@
 
     import axios from "axios";
     import { apiBase } from "../utilities";
+    import Form from "../Form.svelte";
 
     let data;
 
@@ -13,7 +14,7 @@
         Area: Area,
     };
 
-    let dayDate = "";
+    let dayDate = new Date().toISOString().split("T")[0];
     let NoEmpleado = "";
     let Name = "";
     let Area = "";
@@ -22,7 +23,6 @@
 
     let weekDay;
 
-    $: console.log(Name);
     function searchByNoEmpleado() {
         if (dayDate && NoEmpleado) {
             axios.post(apiBase + "/employees/productivity/getsingle", searchInfo).then((res) => {
@@ -65,9 +65,7 @@
     }
 </script>
 
-<form class="form1">
-    <img class="close-button" src="" alt="" on:click={() => (show = false)} />
-
+<Form bind:show>
     <input type="date" name="" id="" bind:value={dayDate} on:blur={searchByNoEmpleado} />
 
     <p>No. Empleado:</p>
@@ -112,4 +110,4 @@
         <input type="text" placeholder="Comentario" bind:value={data[`${weekDay}Comment`]} />
     {/if}
     <button on:click|preventDefault={submmit}>Subir</button>
-</form>
+</Form>

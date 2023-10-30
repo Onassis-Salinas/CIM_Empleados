@@ -21,24 +21,6 @@ button:hover {
     /* transform: scale(0.95); */
 }
 
-.form1 {
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(50%, -50%);
-    display: flex;
-    width: clamp(200px, 90%, 600px);
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    background-color: var(--bc);
-    padding: 20px;
-    border: 1px solid var(--border);
-    /* display: none; */
-    z-index: 100;
-}
-
 .form1 select,
 .form1 input,
 .form1 p {
@@ -60,20 +42,3 @@ button:hover {
 .form1 .spacer {
     width: 100%;
 }
-
-form .close-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 15px;
-    aspect-ratio: 1;
-}
-
-/* .form1::after{
-    content: "";
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-} */

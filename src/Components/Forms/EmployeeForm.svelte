@@ -1,9 +1,10 @@
 <script>
-    export let show = false
+    export let show = false;
 
     import axios from "axios";
     import ErrorMessage from "../ErrorMessage.svelte";
     import { apiBase } from "../utilities";
+    import Form from "../Form.svelte";
 
     let data = {
         Id: "",
@@ -47,10 +48,7 @@
     }
 </script>
 
-<form class="form1" action="">
-    <img class="close-button" src="" alt="" on:click={() => (show = false)}>
-
-
+<Form bind:show>
     <div class="form-wrapper">
         <p>No. Empleado</p>
         <input type="number" name="" id="" bind:value={data.NoEmpleado} />
@@ -115,6 +113,6 @@
     </div>
     <div class="spacer" />
     <button on:click|preventDefault={sendData}>Agregar</button>
-</form>
+</Form>
 
 <!-- <PostForm {data} {url} {inputs} /> -->

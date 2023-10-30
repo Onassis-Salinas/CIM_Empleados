@@ -6,6 +6,7 @@
     let keys;
     let res;
     let tables = [];
+    let incidences = [];
 
     $: if (APIFetch) initializeTable();
 
@@ -32,6 +33,10 @@
                 });
             });
     }
+
+    axios.get(apiBase + "/employees/various/incidences").then((res) => (incidences = res.data));
+
+    $: console.log(incidences);
 </script>
 
 {#if !res}
@@ -53,7 +58,13 @@
                         {#if key === "Nombre" || key === "Puesto"}
                             <td>{employee[key]}</td>
                         {:else}
-                            <td><input type="text" bind:value={res[j].Rows[i][key]} on:blur={() => send(j, i)} /></td>
+                            <td>
+                                <select name="" id="" bind:value={res[j].Rows[i][key]} on:blur={() => send(j, i)}>
+                                    {#each incidences as incidence}
+                                        <option value={incidence.Code}>{incidence.Name}</option>
+                                    {/each}
+                                </select>
+                            </td>
                         {/if}
                     {/each}
                 </tr>
@@ -63,17 +74,14 @@
 {/if}
 
 <style>
-    td {
-        padding: 0;
-    }
-    input {
+    select {
         font-size: var(--font2);
         background: none;
         border: none;
         margin: 0;
         height: 100%;
         width: 100%;
-        
+
         padding: 8px 0;
     }
 </style>

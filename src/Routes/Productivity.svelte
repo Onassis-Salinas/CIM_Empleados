@@ -21,6 +21,4 @@
 <input type="date" name="" id="" bind:value={date} on:change={getData} />
 <button on:click={() => (show = true)}>Registrar</button>
 <Table {APIFetch} />
-{#if show}
-    <ProductivityForm bind:show />
-{/if}
+<ProductivityForm bind:show />

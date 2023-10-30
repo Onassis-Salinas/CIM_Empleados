@@ -2,9 +2,12 @@
     import axios from "axios";
     import { apiBase, showError } from "../utilities";
     import ErrorMessage from "../ErrorMessage.svelte";
+    import QuitForm from "./QuitForm.svelte";
 
     export let APIFetch;
     export let filter;
+    let show = false;
+    let quitId = 0;
 
     let keys;
     let rows;
@@ -71,7 +74,7 @@
             {#each keys as key}
                 <th>{key}</th>
             {/each}
-            <th>Edit</th>
+            <th>Acciones</th>
         </tr>
 
         {#each filteredRows as employee, i}
@@ -91,9 +94,19 @@
                 {#if isEditing && idBeingEdited === employee["No. Empleado"]}
                     <td><button on:click={() => send(i)}>Subir</button></td>
                 {:else}
-                    <td><button on:click={() => edit(employee["No. Empleado"])}>Editar</button></td>
+                    <td>
+                        <button on:click={() => edit(employee["No. Empleado"])}>Editar</button>
+                        <button
+                            on:click={() => {
+                                show = true;
+                                quitId = employee["Id"];
+                            }}>Baja</button
+                        >
+                    </td>
                 {/if}
             </tr>
         {/each}
     </table>
 {/if}
+
+<QuitForm bind:show bind:quitId />
