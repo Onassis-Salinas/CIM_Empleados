@@ -1,7 +1,6 @@
 <script>
     import axios from "axios";
     import { apiBase, showError } from "../utilities";
-    import ErrorMessage from "../ErrorMessage.svelte";
     import QuitForm from "./QuitForm.svelte";
 
     export let APIFetch;

@@ -3,70 +3,60 @@
     import { apiBase } from "../Components/utilities";
     import SingleData from "../Components/SingleData.svelte";
 
-    let misses = 0;
-    let assistance = 0;
-    let permissions = 0;
+    let promise;
     let fires = 0;
     let hires = 0;
     let activeEmployees = 0;
+    let incidences = new Array();
+    let employeeRotation;
+    let employeeTemplate;
 
-    axios
-        .post(apiBase + "/employees/info/dailyincidence", {
+    async function makeAPIRequests() {
+        promise = await axios.post(apiBase + "/employees/info/weeklyfires", {
             Date: new Date(),
-            Code: "F",
-        })
-        .then((res) => {
-            misses = res.data[0].count;
         });
-    axios
-        .post(apiBase + "/employees/info/dailyincidence", {
+        fires = promise.data[0].count;
+
+        promise = await axios.post(apiBase + "/employees/info/weeklyhires", {
             Date: new Date(),
-            Code: ".",
-        })
-        .then((res) => {
-            assistance = res.data[0].count;
         });
-    axios
-        .post(apiBase + "/employees/info/dailyincidence", {
+        hires = promise.data[0].count;
+
+        promise = await axios.post(apiBase + "/employees/info/assistanceinfo", {
             Date: new Date(),
-            Code: "P",
-        })
-        .then((res) => {
-            permissions = res.data[0].count;
         });
-    axios
-        .post(apiBase + "/employees/info/weeklyfires", {
+        incidences = promise.data;
+
+        promise = await axios.post(apiBase + "/employees/info/employeerotation", {
             Date: new Date(),
-        })
-        .then((res) => {
-            fires = res.data[0].count;
         });
-    axios
-        .post(apiBase + "/employees/info/weeklyhires", {
-            Date: new Date(),
-        })
-        .then((res) => {
-            hires = res.data[0].count;
-        });
-    axios.get(apiBase + "/employees/info/activeemployees").then((res) => {
-        activeEmployees = res.data[0].count;
-    });
+        employeeRotation = promise.data.result;
+
+        promise = await axios.get(apiBase + "/employees/info/activeemployees");
+        activeEmployees = promise.data[0].count;
+
+        promise = await axios.get(apiBase + "/employees/info/employeetemplate");
+        employeeTemplate = promise.data.value;
+        employeeTemplate = (activeEmployees / employeeTemplate) * 100;
+    }
+    makeAPIRequests();
 </script>
 
 <div>
-    <SingleData text="Faltas" amount={misses} />
-    <SingleData text="Asistencia" amount={assistance} />
-    <SingleData text="Permisos" amount={permissions} />
-    <SingleData text="Contrataciones" amount={hires} />
-    <SingleData text="Bajas" amount={fires} />
-    <SingleData text="Empleados" amount={activeEmployees} />
+    <SingleData text="Contrataciones semanales" amount={hires} />
+    <SingleData text="Bajas semanales" amount={fires} />
+    <SingleData text="Empleados activos" amount={activeEmployees} />
+    <SingleData text="Rotacion ultimas 4 semanas" amount={`${employeeRotation}%`} />
+    <SingleData text="Cumplimiento de plantilla" amount={`${employeeTemplate}%`} />
 </div>
 
 <style>
-    div{
+    div {
         display: flex;
         width: 100%;
         flex-wrap: wrap;
         flex-grow: 1;
+        gap: 10px;
+        margin-bottom: 10px;
     }
 </style>
