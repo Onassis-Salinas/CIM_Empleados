@@ -27,6 +27,7 @@
     border: 1px solid var(--border);
     padding: 10px;
     max-width: 100px;
+    overflow-x: hidden;
 }
 
 .table1 th:first-child {

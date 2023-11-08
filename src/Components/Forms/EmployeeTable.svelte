@@ -2,15 +2,18 @@
     import axios from "axios";
     import { apiBase, showError } from "../utilities";
     import QuitForm from "./QuitForm.svelte";
+    import EditEmployeeForm from "./EditEmployeeForm.svelte";
 
     export let APIFetch;
     export let filter;
     let show = false;
+    let show1 = false;
     let quitId = 0;
 
     let keys;
     let rows;
     let filteredRows;
+    let dataToEdit;
 
     $: if (filter) filterTables();
 
@@ -29,9 +32,6 @@
         if (filter.NoEmpleado) filteredRows = rows.filter((row) => filter.NoEmpleado == row["No. Empleado"]);
     }
 
-    let isEditing = false;
-    let idBeingEdited = "";
-
     $: if (APIFetch) initializeTable();
 
     function initializeTable() {
@@ -42,23 +42,9 @@
         });
     }
 
-    function edit(id) {
-        isEditing = true;
-        idBeingEdited = id;
-    }
-    function send(i) {
-        console.log(filteredRows);
-        axios
-            .put(apiBase + "/employees/data", filteredRows[i])
-            .then((result) => {
-                isEditing = false;
-                idBeingEdited = "";
-                filteredRows[i] = result.data[0];
-            })
-            .catch((err) => {
-                console.log(err);
-                showError(err);
-            });
+    function edit(i) {
+        dataToEdit = filteredRows[i];
+        show1 = true;
     }
 </script>
 
@@ -79,33 +65,22 @@
         {#each filteredRows as employee, i}
             <tr>
                 {#each keys as key}
-                    {#if isEditing && idBeingEdited === employee["No. Empleado"]}
-                        {#if key === "Fecha de ingreso"}
-                            <td><input type="date" bind:value={filteredRows[i][key]} /></td>
-                        {:else}
-                            <td><input type="text" bind:value={filteredRows[i][key]} /></td>
-                        {/if}
-                    {:else}
-                        <td>{employee[key]}</td>
-                    {/if}
+                    <td>{employee[key] ? employee[key] : ""}</td>
                 {/each}
 
-                {#if isEditing && idBeingEdited === employee["No. Empleado"]}
-                    <td><button on:click={() => send(i)}>Subir</button></td>
-                {:else}
-                    <td>
-                        <button on:click={() => edit(employee["No. Empleado"])}>Editar</button>
-                        <button
-                            on:click={() => {
-                                show = true;
-                                quitId = employee["Id"];
-                            }}>Baja</button
-                        >
-                    </td>
-                {/if}
+                <td>
+                    <button on:click={() => edit(i)}>Editar</button>
+                    <button
+                        on:click={() => {
+                            show = true;
+                            quitId = employee["Id"];
+                        }}>Baja</button
+                    >
+                </td>
             </tr>
         {/each}
     </table>
 {/if}
 
+<EditEmployeeForm bind:show={show1} data={dataToEdit} />
 <QuitForm bind:show bind:quitId />

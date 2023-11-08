@@ -23,8 +23,6 @@
         Active: 1,
     };
 
-    let url = apiBase + "/employees/data";
-
     let inputs = [
         { title: "No. Empleado", value: "NoEmpleado" },
         { title: "Nombre", value: "Name" },

@@ -6,15 +6,19 @@
     }, 2000)
 </script>
 
-<div class="error">
-    <h1>{message}</h1>
-</div>
+<h1 class="error">
+    {message}
+</h1>
 
 <style>
-    div {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: #f00;
+    h1 {
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 99999;
+        background-color: rgb(187, 27, 27);
+        border-radius: 3px;
+        padding: 5px 20px;
     }
 </style>

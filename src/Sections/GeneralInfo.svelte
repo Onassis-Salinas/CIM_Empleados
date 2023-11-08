@@ -30,14 +30,14 @@
         promise = await axios.post(apiBase + "/employees/info/employeerotation", {
             Date: new Date(),
         });
-        employeeRotation = promise.data.result;
+        employeeRotation = promise.data.result.toFixed(2);
 
         promise = await axios.get(apiBase + "/employees/info/activeemployees");
         activeEmployees = promise.data[0].count;
 
         promise = await axios.get(apiBase + "/employees/info/employeetemplate");
         employeeTemplate = promise.data.value;
-        employeeTemplate = (activeEmployees / employeeTemplate) * 100;
+        employeeTemplate = ((activeEmployees / employeeTemplate) * 100).toFixed(2);
     }
     makeAPIRequests();
 </script>
