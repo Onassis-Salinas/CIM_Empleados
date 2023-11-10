@@ -44,10 +44,23 @@
             "Salario de nomina": null,
             "Salario integrado IMMS": null,
         };
+        const inputsMaxLength ={
+            "No. Empleado": 5,
+            NSS: 11,
+            CURP: 18,
+            RFC: 13,
+            Sangre: 3,
+            Cuenta: 11,
+            "Numero de emergencia": 10,
+            Hijos: 2,
+            "Numero de clinica": 2,
+            "Numero de telefono": 10,
+            Turno: 10,
+        }
 
     let keys = [];
 
-    $: if (data) keys = Object.keys(data).filter((e) => e !== "Id");
+    $: if (data) keys = Object.keys(data).filter((e) => e !== "Id" && e!== "vacaciones" && e!== "Fecha de ingreso");
 
     const sendEdit = (i) => {
         axios
@@ -81,34 +94,51 @@
             {#if key.includes("Fecha") || key.includes("HYR") || key.includes("CIM")}
                 <input type="date" bind:value={data[key]} />
             {:else if key === "Area"}
-                <select>
+                <select bind:value={data[key]}>
                     <option value="" />
                     {#each areas as area}
                         <option value={area.Name}>{area.Name}</option>
                     {/each}
                 </select>
             {:else if key === "Posicion"}
-                <select>
+                <select bind:value={data[key]}>
                     <option value="" />
                     {#each positions as position}
                         <option value={position.Name}>{position.Name}</option>
                     {/each}
                 </select>
+            {:else if key === "Genero"}
+                <select name="" id="" bind:value={data[key]}>
+                    <option value="H">Hombre</option>
+                    <option value="M">Mujer</option>
+                </select>
+            {:else if key === "Banco"}
+            <select name="" id="" bind:value={data[key]}>
+                <option value="Santander">Santander</option>
+                <option value="Bancomer">Bancomer</option>
+            </select>
             {:else}
-                <input type="text" bind:value={data[key]} />
+                <input maxlength={inputsMaxLength[key]} type="text" bind:value={data[key]} />
             {/if}
         </div>
     {/each}
 
-    {#if editing}
-        <button on:click|preventDefault={sendEdit}>Editar</button>
-    {:else}
-        <button on:click|preventDefault={sendUpload}>Subir</button>
-    {/if}
+    <div class="button-container">
+        {#if editing}
+            <button on:click|preventDefault={sendEdit}>Listo</button>
+        {:else}
+            <button on:click|preventDefault={sendUpload}>Agregar</button>
+        {/if}
+    </div>
 </Form>
 
 <style>
     .container {
         width: max(30%, 100px);
+    }
+    .button-container{
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 </style>

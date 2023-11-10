@@ -1,6 +1,7 @@
 <script>
     import axios from "axios";
     import { apiBase, showError } from "../utilities";
+    import Table from "../Table.svelte";
     export let APIFetch;
 
     let keys;
@@ -43,7 +44,7 @@
     loading...
 {:else if res.length !== 0 && res.length}
     {#each res as table, j}
-        <table class="table1">
+        <Table>
             <tr>
                 <th colspan={keys.length}>{table.Name}</th>
             </tr>
@@ -69,19 +70,18 @@
                     {/each}
                 </tr>
             {/each}
-        </table>
+        </Table>
     {/each}
 {/if}
 
 <style>
     select {
-        font-size: var(--font2);
+        font-size: var(--font1);
         background: none;
         border: none;
         margin: 0;
         height: 100%;
         width: 100%;
-
         padding: 8px 0;
     }
 </style>

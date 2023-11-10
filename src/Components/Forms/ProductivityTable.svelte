@@ -1,4 +1,6 @@
 <script>
+    import Table from "../Table.svelte";
+
     export let APIFetch;
     let keys;
     let tables;
@@ -60,7 +62,7 @@
     loading...
 {:else if tables.length !== 0}
     {#each tables as table, k}
-        <table class="table1">
+        <Table>
             <tr>
                 <th colspan={keys.length}>{table.Name}</th>
             </tr>
@@ -89,6 +91,6 @@
                     {/each}
                 </tr>
             {/each}
-        </table>
+        </Table>
     {/each}
 {/if}

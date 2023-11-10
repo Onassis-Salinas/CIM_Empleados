@@ -20,11 +20,13 @@
         border-radius: var(--br);
         border: 1px solid var(--border);
     }
+
     p {
         font-size: 20px;
         margin: 0;
         text-align: center;
     }
+
     b {
         font-size: 30px;
         color: var(--color1);

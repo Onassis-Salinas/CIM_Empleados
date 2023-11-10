@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+
 :root {
     --headerheight: 60px;
     --sideBarWidth: 180px;
@@ -10,6 +12,7 @@
     --color1: #d94e4e;
     --color2: #4ea1d9;
     --color3: #f6b14f;
+    --color4: #9af64f;
     --secondary: #959d99;
     --text: #1a1f2e;
 
@@ -21,7 +24,7 @@
 }
 
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Raleway", sans-serif;
     margin: 0;
     background-color: var(--bc);
     font-size: var(--font2);
