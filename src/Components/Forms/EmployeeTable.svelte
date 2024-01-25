@@ -90,7 +90,7 @@
         </tr>
         <tr>
             {#each keys as key}
-                <th>{key}</th>
+                <th>{key === "vacaciones pagadas" ? "vacaciones" : key}</th>
             {/each}
             <th>Antiguedad</th>
             <th>Acciones</th>
@@ -99,9 +99,8 @@
         {#each filteredRows as employee, i}
             <tr>
                 {#each keys as key}
-                    {#if key === "vacaciones"}
-                        <!-- <td>{parseInt(employee[key])}</td> -->
-                        <td>{getVacationsPerYear(differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))) - parseInt(employee[key])}</td>
+                    {#if key === "vacaciones pagadas"}
+                        <td>{getVacationsPerYear(differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))) - parseInt(employee["vacaciones pagadas"]) - parseInt(employee["vacaciones sin pagar"]) || ""}</td>
                     {:else}
                         <td>{employee[key] ? employee[key] : ""}</td>
                     {/if}

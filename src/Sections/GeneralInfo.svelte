@@ -36,7 +36,7 @@
         activeEmployees = promise.data[0].count;
 
         promise = await axios.get(apiBase + "/employees/info/employeetemplate");
-        employeeTemplate = promise.data.value;
+        employeeTemplate = promise.data[0].value;
         employeeTemplate = ((activeEmployees / employeeTemplate) * 100).toFixed(2);
     }
     makeAPIRequests();

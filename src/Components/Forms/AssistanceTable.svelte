@@ -27,7 +27,6 @@
                 res[table].Rows[row] = result.data[0];
             })
             .catch((err) => {
-                console.log(res[table].Rows[row]);
                 axios.post(apiBase + "/employees/assistance/single", res[table].Rows[row]).then((result) => {
                     res[table].Rows[row] = result.data[0];
                     showError(err);

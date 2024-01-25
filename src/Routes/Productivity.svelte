@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import Table from "../Components/forms/ProductivityTable.svelte";
+    import Table from "../Components/Forms/ProductivityTable.svelte";
     import ProductivityForm from "../Components/Forms/ProductivityForm.svelte";
     import { onMount } from "svelte";
     import { apiBase } from "../Components/utilities";
