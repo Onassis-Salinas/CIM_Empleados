@@ -2,7 +2,6 @@
     import axios from "axios";
     import Form from "../Form.svelte";
     import { apiBase, showError } from "../utilities";
-    import { onMount } from "svelte";
 
     export let show;
     export let data = null;
@@ -11,56 +10,27 @@
     let positions = [];
     let result;
 
-    if (!data)
-        data = {
-            Nombre: null,
-            Posicion: null,
-            "No. Empleado": null,
-            Area: null,
-            NSS: null,
-            CURP: null,
-            RFC: null,
-            Sangre: null,
-            Cuenta: null,
-            "Contacto de emergencia": null,
-            "Numero de emergencia": null,
-            "Fecha de ingreso": null,
-            Vacaciones: null,
-            "Lugar de nacimiento": null,
-            Genero: null,
-            Hijos: null,
-            "Numero de clinica": null,
-            Email: null,
-            "Numero de telefono": null,
-            Direccion: null,
-            Banco: null,
-            "Numero de infonavit": null,
-            "Cuota fija de infonavit": null,
-            "Descuento de infonavit": null,
-            "Tipo de posicion": null,
-            "Cambio de HYR": null,
-            "Cambio de CIM": null,
-            Turno: null,
-            "Salario de nomina": null,
-            "Salario integrado IMMS": null,
-        };
-        const inputsMaxLength ={
-            "No. Empleado": 5,
-            NSS: 11,
-            CURP: 18,
-            RFC: 13,
-            Sangre: 3,
-            Cuenta: 11,
-            "Numero de emergencia": 10,
-            Hijos: 2,
-            "Numero de clinica": 2,
-            "Numero de telefono": 10,
-            Turno: 10,
-        }
+    if (!data) axios.get(apiBase + "/employees/data/model").then((res) => (data = res.data));
+
+    // if (!data) axios.get(apiBase + "/employees/data/model").then((res) => console.log(res.data));
+
+    const inputsMaxLength = {
+        "No. Empleado": 5,
+        NSS: 11,
+        CURP: 18,
+        RFC: 13,
+        Sangre: 3,
+        Cuenta: 11,
+        "Numero de emergencia": 10,
+        Hijos: 2,
+        "Numero de clinica": 2,
+        "Numero de telefono": 10,
+        Turno: 10,
+    };
 
     let keys = [];
 
-    $: if (data) keys = Object.keys(data).filter((e) => e !== "Id" && e!== "vacaciones" && e!== "Fecha de ingreso");
+    $: if (data) keys = Object.keys(data).filter((e) => e !== "Id" && e !== "vacaciones");
 
     const sendEdit = (i) => {
         axios
@@ -89,9 +59,11 @@
 <Form bind:show>
     {#each keys as key}
         <div class="container">
-            <p>{key}:</p>
+            {#if !key.includes("vacaciones")}
+                <p>{key}</p>
+            {/if}
 
-            {#if key.includes("Fecha") || key.includes("HYR") || key.includes("CIM")}
+            {#if key.includes("Fecha") || key.includes("HYR") || key.includes("CIM") || key.includes("FDNAC")}
                 <input type="date" bind:value={data[key]} />
             {:else if key === "Area"}
                 <select bind:value={data[key]}>
@@ -113,11 +85,11 @@
                     <option value="M">Mujer</option>
                 </select>
             {:else if key === "Banco"}
-            <select name="" id="" bind:value={data[key]}>
-                <option value="Santander">Santander</option>
-                <option value="Bancomer">Bancomer</option>
-            </select>
-            {:else}
+                <select name="" id="" bind:value={data[key]}>
+                    <option value="Santander">Santander</option>
+                    <option value="Bancomer">Bancomer</option>
+                </select>
+            {:else if key.includes("vacaciones")}{:else}
                 <input maxlength={inputsMaxLength[key]} type="text" bind:value={data[key]} />
             {/if}
         </div>
@@ -136,7 +108,7 @@
     .container {
         width: max(30%, 100px);
     }
-    .button-container{
+    .button-container {
         width: 100%;
         display: flex;
         justify-content: center;
