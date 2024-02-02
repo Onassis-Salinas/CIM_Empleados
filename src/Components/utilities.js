@@ -5,4 +5,4 @@ export function showError(err) {
     new ErrorMessage({ target: document.body, props: { message: err.response.data.error } });
 }
 
-export const apiBase = "http://localhost:3000";
+export const apiBase = import.meta.env.VITE_APIBASE;
