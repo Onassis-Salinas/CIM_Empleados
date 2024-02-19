@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import { apiBase, showError } from "../utilities";
+    import { apiBase, showError } from "../../lib/utilities";
     import Table from "../Table.svelte";
     export let APIFetch;
 
@@ -40,47 +40,41 @@
 </script>
 
 {#if !res}
-    loading...
+    <span class="loading loading-spinner loading-lg" />
 {:else if res.length !== 0 && res.length}
-    {#each res as table, j}
-        <Table>
-            <tr>
-                <th colspan={keys.length}>{table.Name}</th>
-            </tr>
-            <tr>
-                {#each keys as key}
-                    <th>{key}</th>
-                {/each}
-            </tr>
-            {#each table.Rows as employee, i}
-                <tr>
-                    {#each keys as key}
-                        {#if key === "Nombre" || key === "Puesto"}
-                            <td>{employee[key]}</td>
-                        {:else}
-                            <td>
-                                <select name="" id="" bind:value={res[j].Rows[i][key]} on:blur={() => send(j, i)}>
-                                    {#each incidences as incidence}
-                                        <option value={incidence.Code}>{incidence.Name}</option>
-                                    {/each}
-                                </select>
-                            </td>
-                        {/if}
+    <div class="flex flex-col gap-10">
+        {#each res as table, j}
+            <Table>
+                <thead>
+                    <tr>
+                        <th colspan={keys.length}>{table.Name}</th>
+                    </tr>
+                    <tr>
+                        {#each keys as key}
+                            <th>{key}</th>
+                        {/each}
+                    </tr>
+                </thead>
+                <tbody>
+                    {#each table.Rows as employee, i}
+                        <tr>
+                            {#each keys as key}
+                                {#if key === "Nombre" || key === "Puesto"}
+                                    <td>{employee[key]}</td>
+                                {:else}
+                                    <td>
+                                        <select class="select select-bordered select-xs w-full max-w-xs" name="" id="" bind:value={res[j].Rows[i][key]} on:blur={() => send(j, i)}>
+                                            {#each incidences as incidence}
+                                                <option value={incidence.Code}>{incidence.Name}</option>
+                                            {/each}
+                                        </select>
+                                    </td>
+                                {/if}
+                            {/each}
+                        </tr>
                     {/each}
-                </tr>
-            {/each}
-        </Table>
-    {/each}
+                </tbody>
+            </Table>
+        {/each}
+    </div>
 {/if}
-
-<style>
-    select {
-        font-size: var(--font1);
-        background: none;
-        border: none;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-        padding: 8px 0;
-    }
-</style>

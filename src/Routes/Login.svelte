@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import { apiBase } from "../Components/utilities";
+    import { apiBase, showError } from "../lib/utilities";
     import { navigate } from "svelte-routing";
 
     let username;
@@ -14,18 +14,31 @@
                 Password: password,
             });
 
-            promise = await axios.get(apiBase + "/employees/info/employeetemplate");
-
             navigate("/");
         } catch (err) {
             console.log(err);
+            showError(err);
         }
     };
 </script>
 
-<form on:submit|preventDefault={loginUser}>
-    <h2>Iniciar Sesion</h2>
-    <input type="text" bind:value={username} placeholder="Usuario" />
-    <input type="text" name="" id="" bind:value={password} placeholder="Contrasena" />
-    <button>Login</button>
-</form>
+<div class="w-full p-6 m-auto lg:max-w-lg">
+    <h1 class="text-3xl font-semibold text-center text-gray-700">Iniciar Sesion</h1>
+    <form class="space-y-4" on:submit|preventDefault={loginUser}>
+        <div>
+            <label class="label">
+                <span class="text-base label-text">Usuario:</span>
+            </label>
+            <input type="text" class=" input-sm w-full input input-bordered" bind:value={username} />
+        </div>
+        <div>
+            <label class="label">
+                <span class="text-base label-text">Contraseña:</span>
+            </label>
+            <input type="password" class="w-full input input-bordered input-sm" bind:value={password} />
+        </div>
+        <div>
+            <button class="btn btn-sm btn-block">Iniciar sesion</button>
+        </div>
+    </form>
+</div>

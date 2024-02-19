@@ -1,9 +1,9 @@
 <script>
     import axios from "axios";
-    import { apiBase } from "../Components/utilities";
-
     import Chart from "chart.js/auto";
+    import { apiBase } from "../lib/utilities";
     import { onMount } from "svelte";
+
 
     let promise;
     let incidences = new Array();
@@ -46,14 +46,14 @@
             },
         });
     };
-
+    
     onMount(renderGraph);
 </script>
 
 <div class="container">
     <h3>Asistencia por area</h3>
 
-    <select name="" id="" bind:value={area} on:change={renderGraph}>
+    <select class=" select select-bordered select-sm w-full max-w-xs" name="" id="" bind:value={area} on:change={renderGraph}>
         {#each areas as areas}
             <option value={areas.Name}>{areas.Name}</option>
         {/each}
@@ -82,8 +82,5 @@
     h3 {
         text-align: center;
         font-size: var(--font3);
-    }
-    select {
-        width: 90%;
     }
 </style>

@@ -1,12 +1,12 @@
-<div>
-    <table class="table1">
+<div class="table-container overflow-x-auto">
+    <table class="table table-xs table-pin-rows table-pin-cols table-zebra table-primary">
         <slot />
     </table>
 </div>
 
 <style>
-    div {
-        width: max(250px, calc(95vw - var(--sideBarWidth)));
-        overflow-x: auto;
+    .table-container {
+        max-width: calc(100vw - 40px);
+        max-height: calc(100vh - calc(var(--headerheight) + 75px));
     }
 </style>

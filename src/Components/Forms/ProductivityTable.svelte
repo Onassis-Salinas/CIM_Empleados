@@ -56,41 +56,44 @@
     }
 </script>
 
-<button on:click={filterResults}>Results</button>
+<button class="btn btn-sm" on:click={filterResults}>Results</button>
 
 {#if !tables}
-    loading...
+    <span class="loading loading-spinner loading-lg" />
 {:else if tables.length !== 0}
     {#each tables as table, k}
         <Table>
-            <tr>
-                <th colspan={keys.length}>{table.Name}</th>
-            </tr>
-
-            <tr>
-                <th colspan="2">Info</th>
-                {#each weekDays as day}
-                    <th colspan={(keys.length - 2) / 5}>{day}</th>
-                {/each}
-            </tr>
-
-            <tr>
-                {#each keys as key}
-                    <th>{key.includes("Code") || key.includes("Goal") || key.includes("Produced") ? key.substring(1, key.length - 1) : key}</th>
-                {/each}
-            </tr>
-
-            {#each table.Rows as row, j}
+            <thead>
                 <tr>
-                    {#each keys as key, i}
-                        {#if key === "Promedio"}
-                            <td>{getAverage(i, j, k)} %</td>
-                        {:else}
-                            <td>{row[key] ? row[key] : ""}</td>
-                        {/if}
+                    <th colspan={keys.length}>{table.Name}</th>
+                </tr>
+
+                <tr>
+                    <th colspan="2">Info</th>
+                    {#each weekDays as day}
+                        <th colspan={(keys.length - 2) / 5}>{day}</th>
                     {/each}
                 </tr>
-            {/each}
+
+                <tr>
+                    {#each keys as key}
+                        <th>{key.includes("Code") || key.includes("Goal") || key.includes("Produced") ? key.substring(1, key.length - 1) : key}</th>
+                    {/each}
+                </tr>
+            </thead>
+            <tbody>
+                {#each table.Rows as row, j}
+                    <tr>
+                        {#each keys as key, i}
+                            {#if key === "Promedio"}
+                                <td>{getAverage(i, j, k)} %</td>
+                            {:else}
+                                <td>{row[key] ? row[key] : ""}</td>
+                            {/if}
+                        {/each}
+                    </tr>
+                {/each}
+            </tbody>
         </Table>
     {/each}
 {/if}

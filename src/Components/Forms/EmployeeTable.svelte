@@ -1,11 +1,12 @@
 <script>
-    import { differenceInYears, parse } from "date-fns";
+    import { differenceInYears } from "date-fns";
     import QuitForm from "./QuitForm.svelte";
     import EditEmployeeForm from "./EditEmployeeForm.svelte";
     import Table from "../Table.svelte";
+    import axios from "axios";
+    import { apiBase } from "../../lib/utilities";
 
-    export let APIFetch;
-    export let filter = { NoEmpleado: "", Area: "", Position: "" };
+    export let filter = {};
     let show = false;
     let show1 = false;
     let quitId = 0;
@@ -32,10 +33,21 @@
         if (filter.NoEmpleado) filteredRows = rows.filter((row) => filter.NoEmpleado == row["No. Empleado"]);
     }
 
-    $: if (APIFetch) initializeTable();
+    $: if (filter.Active === 0) {
+        getInactiveEmployees();
+    } else {
+        getActiveEmployees();
+    }
 
-    function initializeTable() {
-        APIFetch.then((e) => {
+    function getActiveEmployees() {
+        axios.get(apiBase + "/employees/data").then((e) => {
+            rows = e.data;
+            keys = Object.keys(rows[0]).filter((e) => e != "Id");
+            filterTables();
+        });
+    }
+    function getInactiveEmployees() {
+        axios.get(apiBase + "/employees/data/inactive").then((e) => {
             rows = e.data;
             keys = Object.keys(rows[0]).filter((e) => e != "Id");
             filterTables();
@@ -82,40 +94,58 @@
 </script>
 
 {#if !filteredRows}
-    loading...
+    <span class="loading loading-spinner loading-lg" />
 {:else}
     <Table>
-        <tr>
-            <th colspan={keys.length + 2}>Empleados</th>
-        </tr>
-        <tr>
-            {#each keys as key}
-                <th>{key === "vacaciones pagadas" ? "vacaciones" : key}</th>
-            {/each}
-            <th>Antiguedad</th>
-            <th>Acciones</th>
-        </tr>
-
-        {#each filteredRows as employee, i}
-            <tr>
-                {#each keys as key}
-                    {#if key === "vacaciones pagadas"}
-                        <td>{getVacationsPerYear(differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))) - parseInt(employee["vacaciones pagadas"]) - parseInt(employee["vacaciones sin pagar"]) || ""}</td>
+        <thead class="bg-primary-500 text-white">
+            <tr style="z-index: 110;">
+                <th class="sticky" style="position: sticky; left:0; z-index:1;"></th>
+                {#each keys as key, i}
+                    {#if key === "No. Empleado"}
+                        <th class="sticky" style="position: sticky; left:36px; z-index:1;">{key}</th>
+                    {:else if key === "vacaciones pagadas"}
+                        <th class="">{key}</th>
                     {:else}
-                        <td>{employee[key] ? employee[key] : ""}</td>
+                        <th>{key}</th>
                     {/if}
                 {/each}
-
-                <td>{differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))}</td>
-
-                <td>
-                    <div class="button-container">
-                        <button class="edit" on:click={() => edit(i)} />
-                        <button class="delete" on:click={() => handleQuit(i)} />
-                    </div>
-                </td>
+                {#if filter.Active === 1}
+                    <th>Antiguedad</th>
+                {/if}
             </tr>
-        {/each}
+        </thead>
+        <tbody>
+            {#each filteredRows as employee, i}
+                <tr>
+                    <th style="z-index: 9; padding-top:0;padding-bottom:0;">
+                        <div class="dropdown dropdown-right w-5">
+                            {#if filter.Active === 1}
+                                <img src="/dots.svg" alt="" tabindex="0" role="button" style="z-index: 999; " />
+                                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 374.89 z-3">
+                                    <li><button class="btn btn-xs btn-outline btn-info text-white" on:click={() => edit(i)}>editar</button></li>
+                                    <li><button class="btn btn-xs btn-outline btn-error" on:click={() => handleQuit(i)}>Baja</button></li>
+                                </ul>
+                            {/if}
+                        </div>
+                    </th>
+                    {#each keys as key}
+                        {#if key === "No. Empleado"}
+                            <th style="position: sticky!important; left:36px;"> {employee[key] ? employee[key] : ""}</th>
+                        {:else if key === "Acciones"}
+                            <th>{employee[key] ? employee[key] : ""}</th>
+                        {:else if key === "vacaciones pagadas"}
+                            <td>{getVacationsPerYear(differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))) - parseInt(employee["vacaciones pagadas"]) - parseInt(employee["vacaciones sin pagar"]) || ""}</td>
+                        {:else}
+                            <td>{employee[key] ? employee[key] : ""}</td>
+                        {/if}
+                    {/each}
+
+                    {#if filter.Active === 1}
+                        <td>{differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))}</td>
+                    {/if}
+                </tr>
+            {/each}
+        </tbody>
     </Table>
 {/if}
 
@@ -123,26 +153,8 @@
 <QuitForm bind:show bind:quitId />
 
 <style>
-    .button-container {
-        display: flex;
-        gap: 5px;
-    }
-    button {
-        width: 20px;
-        border-radius: 50%;
-        aspect-ratio: 1;
-    }
-    .edit {
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'%3E%3C/path%3E%3Cpath d='M15.7279 9.57629L14.3137 8.16207L5 17.4758V18.89H6.41421L15.7279 9.57629ZM17.1421 8.16207L18.5563 6.74786L17.1421 5.33365L15.7279 6.74786L17.1421 8.16207ZM7.24264 20.89H3V16.6474L16.435 3.21233C16.8256 2.8218 17.4587 2.8218 17.8492 3.21233L20.6777 6.04075C21.0682 6.43128 21.0682 7.06444 20.6777 7.45497L7.24264 20.89Z' fill='rgba(255,255,255,1)'%3E%3C/path%3E%3C/svg%3E");
-        background-color: var(--color2);
-        background-size: 80%;
-        background-position: center;
-    }
-
-    .delete {
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'%3E%3C/path%3E%3Cpath d='M12.0007 10.5865L16.9504 5.63672L18.3646 7.05093L13.4149 12.0007L18.3646 16.9504L16.9504 18.3646L12.0007 13.4149L7.05093 18.3646L5.63672 16.9504L10.5865 12.0007L5.63672 7.05093L7.05093 5.63672L12.0007 10.5865Z' fill='rgba(255,255,255,1)'%3E%3C/path%3E%3C/svg%3E");
-        background-color: var(--color1);
-        background-size: 80%;
-        background-position: center;
+    td,
+    tbody th {
+        white-space: nowrap;
     }
 </style>

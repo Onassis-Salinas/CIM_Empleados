@@ -2,7 +2,7 @@
     export let show = false;
 
     import axios from "axios";
-    import { apiBase } from "../utilities";
+    import { apiBase } from "../../lib/utilities";
     import Form from "../Form.svelte";
 
     let data;

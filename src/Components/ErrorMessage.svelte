@@ -1,9 +1,9 @@
 <script>
-    export let message
+    export let message;
 
-    setTimeout(()=>{
+    setTimeout(() => {
         document.querySelector(".error").remove();
-    }, 2000)
+    }, 2000);
 </script>
 
 <h1 class="error">

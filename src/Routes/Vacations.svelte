@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import { apiBase } from "../Components/utilities";
+    import { apiBase } from "../lib/utilities";
 
     let vacationReq = {
         EmployeeNo: null,
@@ -20,12 +20,12 @@
 </script>
 
 <div>
-    <input type="text" name="" id="" placeholder="Numero de empleado" bind:value={vacationReq.EmployeeNo} />
-    <input type="number" name="" id="" placeholder="Cantidad de dias" bind:value={vacationReq.Days} />
+    <input class="input input-sm input-bordered" type="text" name="" id="" placeholder="Numero de empleado" bind:value={vacationReq.EmployeeNo} />
+    <input class="input input-sm input-bordered" type="number" name="" id="" placeholder="Cantidad de dias" bind:value={vacationReq.Days} />
     <label for="">Inicio</label>
-    <input type="date" name="" id="" bind:value={vacationReq.StartDate} />
+    <input class="input input-sm input-bordered" type="date" name="" id="" bind:value={vacationReq.StartDate} />
     <label for="">Final</label>
-    <input type="date" name="" id="" bind:value={vacationReq.EndDate} />
+    <input class="input input-sm input-bordered" type="date" name="" id="" bind:value={vacationReq.EndDate} />
 
-    <button on:click={uploadReq}>Hacer requisicion </button>
+    <button class="btn btn-sm" on:click={uploadReq}>Hacer requisicion </button>
 </div>

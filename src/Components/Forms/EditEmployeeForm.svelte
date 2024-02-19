@@ -1,7 +1,7 @@
 <script>
     import axios from "axios";
     import Form from "../Form.svelte";
-    import { apiBase, showError } from "../utilities";
+    import { apiBase, showError } from "../../lib/utilities";
 
     export let show;
     export let data = null;
@@ -11,8 +11,6 @@
     let result;
 
     if (!data) axios.get(apiBase + "/employees/data/model").then((res) => (data = res.data));
-
-    // if (!data) axios.get(apiBase + "/employees/data/model").then((res) => console.log(res.data));
 
     const inputsMaxLength = {
         "No. Empleado": 5,
@@ -64,42 +62,43 @@
             {/if}
 
             {#if key.includes("Fecha") || key.includes("HYR") || key.includes("CIM") || key.includes("FDNAC")}
-                <input type="date" bind:value={data[key]} />
+                <input class="input input-sm input-bordered w-full" type="date" bind:value={data[key]} />
             {:else if key === "Area"}
-                <select bind:value={data[key]}>
+                <select class="select select-sm select-bordered w-full" bind:value={data[key]}>
                     <option value="" />
                     {#each areas as area}
                         <option value={area.Name}>{area.Name}</option>
                     {/each}
                 </select>
             {:else if key === "Posicion"}
-                <select bind:value={data[key]}>
+                <select class="select select-sm select-bordered w-full" bind:value={data[key]}>
                     <option value="" />
                     {#each positions as position}
                         <option value={position.Name}>{position.Name}</option>
                     {/each}
                 </select>
             {:else if key === "Genero"}
-                <select name="" id="" bind:value={data[key]}>
+                <select class="select select-sm select-bordered w-full" name="" id="" bind:value={data[key]}>
                     <option value="H">Hombre</option>
                     <option value="M">Mujer</option>
                 </select>
             {:else if key === "Banco"}
-                <select name="" id="" bind:value={data[key]}>
+                <select class="select select-sm select-bordered w-full" name="" id="" bind:value={data[key]}>
                     <option value="Santander">Santander</option>
                     <option value="Bancomer">Bancomer</option>
+                    <option value="Scotiabank">Scotiabank</option>
                 </select>
             {:else if key.includes("vacaciones")}{:else}
-                <input maxlength={inputsMaxLength[key]} type="text" bind:value={data[key]} />
+                <input class="input input-sm input-bordered" maxlength={inputsMaxLength[key]} type="text" bind:value={data[key]} />
             {/if}
         </div>
     {/each}
 
     <div class="button-container">
         {#if editing}
-            <button on:click|preventDefault={sendEdit}>Listo</button>
+            <button class="btn btn-sm" on:click|preventDefault={sendEdit}>Listo</button>
         {:else}
-            <button on:click|preventDefault={sendUpload}>Agregar</button>
+            <button class="btn btn-sm" on:click|preventDefault={sendUpload}>Agregar</button>
         {/if}
     </div>
 </Form>

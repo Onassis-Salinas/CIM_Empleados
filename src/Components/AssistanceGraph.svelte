@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import { apiBase } from "../Components/utilities";
+    import { apiBase } from "../lib/utilities";
 
     import Chart from "chart.js/auto";
     import { onMount } from "svelte";

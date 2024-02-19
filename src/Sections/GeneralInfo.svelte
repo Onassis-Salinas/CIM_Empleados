@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import { apiBase } from "../Components/utilities";
+    import { apiBase } from "../lib/utilities";
     import SingleData from "../Components/SingleData.svelte";
 
     let promise;
@@ -12,51 +12,39 @@
     let employeeTemplate;
 
     async function makeAPIRequests() {
-        promise = await axios.post(apiBase + "/employees/info/weeklyfires", {
-            Date: new Date(),
-        });
-        fires = promise.data[0].count;
+        try {
+            const currentDate = new Date();
+            const requests = [
+                axios.post(apiBase + "/employees/info/weeklyfires", { Date: currentDate }),
+                axios.post(apiBase + "/employees/info/weeklyhires", { Date: currentDate }),
+                axios.post(apiBase + "/employees/info/assistanceinfo", { Date: currentDate }),
+                axios.get(apiBase + "/employees/info/activeemployees"),
+                axios.get(apiBase + "/employees/info/employeetemplate"),
+                axios.post(apiBase + "/employees/info/employeerotation", { Date: currentDate }),
+            ];
 
-        promise = await axios.post(apiBase + "/employees/info/weeklyhires", {
-            Date: new Date(),
-        });
-        hires = promise.data[0].count;
+            const responses = await Promise.all(requests);
 
-        promise = await axios.post(apiBase + "/employees/info/assistanceinfo", {
-            Date: new Date(),
-        });
-        incidences = promise.data;
+            const [firesResponse, hiresResponse, incidencesResponse, activeEmployeesResponse, employeeTemplateResponse, employeeRotationResponse] = responses;
 
-        promise = await axios.post(apiBase + "/employees/info/employeerotation", {
-            Date: new Date(),
-        });
-        employeeRotation = promise.data.result.toFixed(2);
-
-        promise = await axios.get(apiBase + "/employees/info/activeemployees");
-        activeEmployees = promise.data[0].count;
-
-        promise = await axios.get(apiBase + "/employees/info/employeetemplate");
-        employeeTemplate = promise.data[0].value;
-        employeeTemplate = ((activeEmployees / employeeTemplate) * 100).toFixed(2);
+            fires = firesResponse.data[0].count;
+            hires = hiresResponse.data[0].count;
+            incidences = incidencesResponse.data;
+            activeEmployees = activeEmployeesResponse.data[0].count;
+            employeeTemplate = employeeTemplateResponse.data[0].value;
+            employeeTemplate = ((activeEmployees / employeeTemplate) * 100).toFixed(2);
+            employeeRotation = employeeRotationResponse.data.result.toFixed(2);
+        } catch (err) {
+            console.log(err);
+        }
     }
     makeAPIRequests();
 </script>
 
-<div>
+<div class="stats shadow">
     <SingleData text="Contrataciones semanales" amount={hires} />
     <SingleData text="Bajas semanales" amount={fires} />
     <SingleData text="Empleados activos" amount={activeEmployees} />
     <SingleData text="Rotacion ultimas 4 semanas" amount={`${employeeRotation}%`} />
-    <SingleData text="Cumplimiento de plantilla" amount={`${employeeTemplate}%`} />
+    <SingleData text="Cumplimiento de plantilla" amount={`${employeeTemplate}%`} mainClass={employeeTemplate < 100 ? "text-error" : ""} />
 </div>
-
-<style>
-    div {
-        display: flex;
-        width: 100%;
-        flex-wrap: wrap;
-        flex-grow: 1;
-        gap: 10px;
-        margin-bottom: 10px;
-    }
-</style>
