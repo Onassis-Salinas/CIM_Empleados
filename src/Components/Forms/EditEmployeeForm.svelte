@@ -61,8 +61,8 @@
                 <p>{key}</p>
             {/if}
 
-            {#if key.includes("Fecha") || key.includes("HYR") || key.includes("CIM") || key.includes("FDNAC")}
-                <input class="input input-sm input-bordered w-full" type="date" bind:value={data[key]} />
+            {#if key.includes("Fecha") || key.includes("CIM") || key.includes("FDNAC")}
+                <input class="input input-sm input-bordered w-full w-full" type="date" bind:value={data[key]} />
             {:else if key === "Area"}
                 <select class="select select-sm select-bordered w-full" bind:value={data[key]}>
                     <option value="" />
@@ -89,7 +89,7 @@
                     <option value="Scotiabank">Scotiabank</option>
                 </select>
             {:else if key.includes("vacaciones")}{:else}
-                <input class="input input-sm input-bordered" maxlength={inputsMaxLength[key]} type="text" bind:value={data[key]} />
+                <input class="input input-sm input-bordered w-full" maxlength={inputsMaxLength[key]} type="text" bind:value={data[key]} />
             {/if}
         </div>
     {/each}

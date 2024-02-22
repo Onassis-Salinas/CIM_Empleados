@@ -13,12 +13,12 @@
 
 <style>
     .modal-box {
-        max-width: 700px !important;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         flex-wrap: wrap;
         gap: 10px;
         justify-content: center;
+        min-height: 400px;
     }
 
     .modal-backdrop {

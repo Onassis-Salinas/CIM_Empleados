@@ -16,6 +16,7 @@
     import Vacations from "./Routes/Vacations.svelte";
     import Alerts from "./Components/Alerts.svelte";
     import { showError } from "./lib/utilities";
+    import Index from "./Routes/Index.svelte";
 
     axios.defaults.withCredentials = true;
     axios.interceptors.response.use(
@@ -33,7 +34,8 @@
 <Header />
 <main>
     <Router>
-        <Route path="/"><Home /></Route>
+        <Route path="/"><Index></Index></Route>
+        <Route path="/dashboard"><Home /></Route>
 
         <Route path="/login" let:location><Login /></Route>
         <Route path="/users"><Users /></Route>

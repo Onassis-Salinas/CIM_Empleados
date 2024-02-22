@@ -2,8 +2,10 @@
     import axios from "axios";
     import Form from "../Form.svelte";
     import { apiBase, showError } from "../../lib/utilities";
+    import AreasPermissionMenu from "./AreasPermissionMenu.svelte";
 
     export let show;
+    let areaPermission;
     export let userToEdit = {
         UserName: "",
         Password: "",
@@ -11,6 +13,7 @@
         Perm_users: "",
         Perm_employees: "",
         Perm_productivity: "",
+        Perm_assistance_areas: "",
     };
 
     let user = {
@@ -20,6 +23,7 @@
         Perm_users: "",
         Perm_employees: "",
         Perm_productivity: "",
+        Perm_assistance_areas: "",
     };
 
     $: if (userToEdit) setUser();
@@ -38,6 +42,7 @@
 
     const editUser = async () => {
         try {
+            console.log(user);
             const result = await axios.post(apiBase + "/general/users/edit", { ...user, LastUserName: userToEdit.UserName });
             console.log({ ...user, LastUserName: userToEdit.UserName });
             show = false;
@@ -50,12 +55,12 @@
 <Form bind:show>
     <div class="container">
         <p>Nombre de usuario:</p>
-        <input class="input input-sm input-bordered" type="text" bind:value={user.UserName} />
+        <input class="input input-sm input-bordered w-full" type="text" bind:value={user.UserName} />
     </div>
 
     <div class="container">
         <p>Contraseña:</p>
-        <input class="input input-sm input-bordered" type="text" bind:value={user.Password} />
+        <input class="input input-sm input-bordered w-full" type="text" bind:value={user.Password} />
     </div>
 
     <div class="container">
@@ -94,6 +99,10 @@
         </select>
     </div>
 
+    <div class="container">
+        <AreasPermissionMenu bind:areaPermission={user.Perm_assistance_areas} />
+    </div>
+
     {#if userToEdit.UserName}
         <button class="btn btn-sm" on:click|preventDefault={editUser}>Guardar</button>
     {:else}
@@ -104,5 +113,6 @@
 <style>
     .container {
         width: max(30%, 100px);
+        height: fit-content;
     }
 </style>

@@ -5,10 +5,12 @@
     import Table from "../Table.svelte";
     import axios from "axios";
     import { apiBase } from "../../lib/utilities";
+    import Carnet from "./Carnet.svelte";
 
     export let filter = {};
     let show = false;
     let show1 = false;
+    let show2 = false;
     let quitId = 0;
 
     let keys;
@@ -63,6 +65,11 @@
         show = true;
         quitId = filteredRows[i]["Id"];
     }
+
+    const viewCarnet = (i) => {
+        dataToEdit = filteredRows[i];
+        show2 = true;
+    };
 
     function getVacationsPerYear(years) {
         let result = 0;
@@ -122,6 +129,7 @@
                             {#if filter.Active === 1}
                                 <img src="/dots.svg" alt="" tabindex="0" role="button" style="z-index: 999; " />
                                 <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 374.89 z-3">
+                                    <li><button class="btn btn-xs btn-outline btn-info" on:click={() => viewCarnet(i)}>Ver</button></li>
                                     <li><button class="btn btn-xs btn-outline btn-info text-white" on:click={() => edit(i)}>editar</button></li>
                                     <li><button class="btn btn-xs btn-outline btn-error" on:click={() => handleQuit(i)}>Baja</button></li>
                                 </ul>
@@ -151,6 +159,7 @@
 
 <EditEmployeeForm bind:show={show1} data={dataToEdit} />
 <QuitForm bind:show bind:quitId />
+<Carnet bind:show={show2} data={dataToEdit} />
 
 <style>
     td,

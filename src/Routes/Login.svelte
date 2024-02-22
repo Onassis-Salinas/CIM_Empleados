@@ -2,6 +2,7 @@
     import axios from "axios";
     import { apiBase, showError } from "../lib/utilities";
     import { navigate } from "svelte-routing";
+    import { logged } from "../lib/storage";
 
     let username;
     let password;
@@ -15,6 +16,7 @@
             });
 
             navigate("/");
+            logged.set(true);
         } catch (err) {
             console.log(err);
             showError(err);

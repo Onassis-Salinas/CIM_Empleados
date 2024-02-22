@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,7 +14,8 @@
 }
 
 body {
-    font-family: "Raleway", sans-serif;
+    /* font-family: "Raleway", sans-serif; */
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #app {
@@ -35,8 +35,8 @@ main {
 }
 
 thead th {
-    background-color: var(--van-text-color) !important;
-    color: var(--van-background-color) !important;
+    background-color: #323233 !important;
+    color: #fff !important;
 }
 thead th:not(.sticky) {
     position: relative !important;

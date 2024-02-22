@@ -6,5 +6,5 @@
 
 <button class="btn btn-sm" on:click={() => (show = true)}>Registar usuario</button>
 <h2>Usuarios</h2>
-<UsersTable></UsersTable>
+<UsersTable />
 <RegisterUser bind:show></RegisterUser>

@@ -8,5 +8,6 @@
     .table-container {
         max-width: calc(100vw - 40px);
         max-height: calc(100vh - calc(var(--headerheight) + 75px));
+        min-height: 120px;
     }
 </style>
