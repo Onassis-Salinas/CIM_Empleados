@@ -138,13 +138,13 @@
                     </th>
                     {#each keys as key}
                         {#if key === "No. Empleado"}
-                            <th style="position: sticky!important; left:36px;"> {employee[key] ? employee[key] : ""}</th>
+                            <th style="position: sticky!important; left:36px;"> {employee[key] || ""}</th>
                         {:else if key === "Acciones"}
-                            <th>{employee[key] ? employee[key] : ""}</th>
+                            <th>{employee[key] || ""}</th>
                         {:else if key === "vacaciones pagadas"}
                             <td>{getVacationsPerYear(differenceInYears(new Date(), new Date(employee["Fecha de ingreso"]))) - parseInt(employee["vacaciones pagadas"]) - parseInt(employee["vacaciones sin pagar"]) || ""}</td>
                         {:else}
-                            <td>{employee[key] ? employee[key] : ""}</td>
+                            <td>{employee[key] || ""}</td>
                         {/if}
                     {/each}
 

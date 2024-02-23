@@ -13,6 +13,8 @@
     $: if (data) initializeTable();
 
     function initializeTable() {
+        console.log(data);
+        if (data.length === 0) return showError("No existe lista en esa semana");
         res = data;
         keys = Object.keys(res[0].Rows[0]).filter((e) => e != "Id" && e != "Area");
     }
@@ -65,7 +67,7 @@
                         {#each table.Rows as employee, i}
                             <tr>
                                 {#each keys as key}
-                                    {#if key === "Nombre" || key === "Puesto"}
+                                    {#if key === "Nombre" || key === "Puesto" || key === "No. Empleado"}
                                         <td>{employee[key]}</td>
                                     {:else}
                                         <td>
